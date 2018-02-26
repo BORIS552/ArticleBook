@@ -456,3 +456,18 @@ exports.postArticlePic = function(req, res) {
 		});
 	} 
 }
+
+//method for fetching Article Image name.
+exports.getArticlePic = function(req, res) {
+	var q = url.parse(req.url, true);
+	var qdata = q.query;
+	var pid;
+	pid = qdata.pid;
+	conn.query("SELECT article_image FROM posts WHERE id="+pid, function(error, results, fields) {
+		if(error){
+			console.log("Error: "+ error.code);
+			return;
+		}
+		res.json(results);
+	});
+}
