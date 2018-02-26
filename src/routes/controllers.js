@@ -410,3 +410,49 @@ exports.getProfilePic = function(req, res) {
 		res.json(results);
 	});
 }
+
+//method for uploading Article's Pictures.
+exports.postArticlePic = function(req, res) {
+	var q = url.parse(req.url, true);
+	var qdata = q.query;
+	var pid;
+	pid = qdata.pid;
+	console.log(req.files);
+	if(!req.files)
+		return res.send({
+			"code":400,
+			"status": "No files were uploaded"
+		});
+	var file = req.files.uploaded_image;
+	var img_name = "article_"+pid;
+	console.log(img_name);
+	console.log(file.name);
+	var result;
+	if(file.mimetype == "image/jpeg" || file.mimetype == "image/png" || file.mimetype == "image/gif") {
+		file.mv('public/images/article_images/'+img_name, function(err) {
+			if(err)
+				return res.send({
+					"code":500,
+					"Error":err
+				});
+
+			conn.query("UPDATE posts SET article_image='"+img_name+"' WHERE id="+pid, function(error, results, fields) {
+				if(error) {
+					console.log("Error: "+ error.code);
+					return;
+				}
+				result = results;
+			});
+			res.send({
+				"code":200,
+				"Status":"File Uploaded successfully",
+				"Result": result
+			});	
+		});
+	} else {
+		res.send({
+			"code":500,
+			"status":"This Format is not allowed"
+		});
+	} 
+}
