@@ -46,6 +46,7 @@ router.post('/likes', userPath.postLikes);
 router.get('/likes',userPath.getLikes);
 router.get('/allLikes', userPath.getAllLikes);
 router.post('/uploadProfilePic', userPath.postProfilePic);
+router.get('/getProfilePic', userPath.getProfilePic);
 app.use('/api', router);
 app.listen(port, ip);
 console.log("IP=> "+ip+":"+port)

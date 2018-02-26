@@ -366,6 +366,7 @@ exports.postProfilePic = function(req, res) {
 	var img_name = "user_"+uid;
 	console.log(img_name);
 	console.log(file.name);
+	var result;
 	if(file.mimetype == "image/jpeg" || file.mimetype == "image/png" || file.mimetype == "image/gif") {
 		file.mv('public/images/user_profile_images/'+img_name, function(err) {
 			if(err)
@@ -373,10 +374,19 @@ exports.postProfilePic = function(req, res) {
 					"code":500,
 					"Error":err
 				});
+
+			conn.query("UPDATE users SET user_image='"+img_name+"' WHERE id="+uid, function(error, results, fields) {
+				if(error) {
+					console.log("Error: "+ error.code);
+					return;
+				}
+				result = results;
+			});
 			res.send({
 				"code":200,
-				"Status":"File Uploaded successfully"
-			})
+				"Status":"File Uploaded successfully",
+				"Result": result
+			});	
 		});
 	} else {
 		res.send({
@@ -384,4 +394,19 @@ exports.postProfilePic = function(req, res) {
 			"status":"This Format is not allowed"
 		});
 	} 
+}
+
+//method for fethcing profile pic name.
+exports.getProfilePic = function(req, res) {
+	var q = url.parse(req.url, true);
+	var qdata = q.query;
+	var uid;
+	uid = qdata.uid;
+	conn.query("SELECT user_image FROM users WHERE id="+uid, function(error, results, fields) {
+		if(error){
+			console.log("Error: "+ error.code);
+			return;
+		}
+		res.json(results);
+	});
 }
