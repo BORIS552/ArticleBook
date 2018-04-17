@@ -5,6 +5,6 @@ module.exports = {
 	}, 
 
 	ipAddr: function(){
-		return '192.168.1.3';
+		return '192.168.1.2';
 	}
 }

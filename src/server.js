@@ -32,6 +32,7 @@ router.get('/', function(req, res) {
 router.post('/register', userPath.register);
 router.post('/login', userPath.login);
 router.get('/allUsers', userPath.getAllUsers);
+router.get('/userDetails', userPath.getUserDetails);
 router.get('/posts', userPath.getArticles);
 router.post('/posts', userPath.postArticle);
 router.post('/comments', userPath.postComment);

@@ -1,5 +1,8 @@
 var mysql = require('mysql');
-var url = require('url')
+var Hashids = require('hashids');
+var hashids = new Hashids();
+var url = require('url');
+
 var conn = mysql.createConnection({
 	host	 	:'localhost',
 	user 		:'root',
@@ -57,10 +60,26 @@ exports.getAllUsers = function(req, res) {
 	});
 }
 
+//method to fetch user details. 
+exports.getUserDetails = function(req, res) {
+	var q = url.parse(req.url, true);
+	var qdata = q.query;
+	var uid;
+	uid = qdata.id;
+	console.log(req);
+	conn.query("SELECT * FROM users WHERE id ="+uid, function(err,results, fields) {
+		if(err) {
+			console.log("Error: "+ error.code);
+			return;
+		}
+		console.log(results);
+		res.json(results);
+	});
+}
 
 //method to perform login action.
 exports.login = function(req, res){
-	//console.log(req.body);
+	console.log(req.body);
 	var email;
 	var password;
 	email = req.body.email;
@@ -160,7 +179,8 @@ exports.postArticle = function(req, res) {
 			console.log("Content: ", results);
 			res.send({
 				"code":200,
-				"success":"Post Uploaded successfully"
+				"success":"Post Uploaded successfully",
+				"post_id":results.insertId
 			});
 		}
 	});
@@ -471,3 +491,4 @@ exports.getArticlePic = function(req, res) {
 		res.json(results);
 	});
 }
+
