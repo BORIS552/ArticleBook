@@ -122,7 +122,7 @@ exports.login = function(req, res){
 //fetching all Articles in the DB.
 exports.getArticles = function(req, res) {
 	//console.log(req);
-	conn.query('SELECT * FROM posts', function(err, results, fields) {
+	conn.query('SELECT * FROM posts ORDER BY id DESC LIMIT 30', function(err, results, fields) {
 		if(err) {
 			console.log("Error: "+ error.code);
 			return;
