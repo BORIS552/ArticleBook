@@ -4,9 +4,10 @@ var userPath = require('./routes/controllers');
 var serverConfig = require('./serverConfig');
 
 var app = express();
-var port = serverConfig.port();
-var ip = serverConfig.ipAddr();
+//var port = serverConfig.port();
+//var ip = serverConfig.ipAddr();
 
+var alt_port = process.env.PORT || 8080;
 
 var fileUpload = require('express-fileupload');
 var path = require('path');
@@ -51,5 +52,9 @@ router.get('/getProfilePic', userPath.getProfilePic);
 router.post('/uploadArticlePic', userPath.postArticlePic);
 router.get('/getArticlePic', userPath.getArticlePic);
 app.use('/api', router);
-app.listen(port, ip);
-console.log("IP=> "+ip+":"+port)
+//app.listen(port, ip);
+//console.log("IP=> "+ip+":"+port)
+
+app.listen(alt_port, function() {
+	console.log('Our app is running on http://localhost:' + alt_port);
+});
